@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ControllerForForm;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SizeController;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,8 +29,10 @@ Route::prefix('/admin')->group(function(){
     Route::controller(ControllerForForm::class)->group(function(){
             Route::get('parentCategories', 'parentCategories');
             Route::get('allCategories', 'allCategories');
+            Route::get('allSizes', 'allSizes');
+            Route::get('allColors', 'allColors');
     });
     Route::apiResource('/products', ProductController::class);
-
+    Route::apiResource('/sizes', SizeController::class);
 
 });

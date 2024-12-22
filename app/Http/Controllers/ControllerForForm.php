@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Size;
 use Illuminate\Http\Request;
 
 class ControllerForForm extends Controller
@@ -39,6 +41,30 @@ class ControllerForForm extends Controller
                  'allCategories' => $parentCategories
             ]);
         } catch (\Throwable $th){
+            return $this->handleErrorNotDefine($th);
+        }
+    }
+
+    public function allSizes(){
+        try {
+            $sizes = Size::all();
+
+            return response()->json([
+                'success' => true,
+                'sizes' => $sizes
+            ],200);
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
+    }
+    public function allColors(){
+        try {
+            $colors = Color::all();
+            return response()->json([
+                'success' => true,
+                'colors' => $colors
+            ],200);
+        } catch (\Throwable $th) {
             return $this->handleErrorNotDefine($th);
         }
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Category;
+namespace App\Http\Requests\Size;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCategory extends FormRequest
+class StoreSizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +22,7 @@ class StoreCategory extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:categories,name',
-            'parent_id' => 'nullable|exists:categories,id'
+            'name' => 'required|unique:sizes,name'
         ];
     }
-
-    public function messages(){
-        return [
-            'name.required' => 'Tên danh mục không được để trống!',
-            'parent_id.exists' => 'Danh mục cha không tồn tại!'
-        ];
-    }
-    protected $stopOnFirstFailure = true;
-
 }

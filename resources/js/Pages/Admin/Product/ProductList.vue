@@ -3,24 +3,28 @@
     <div>
         <h2>Danh sách sản phẩm</h2>
         <router-link class="btn btn-success" to="add-product">Thêm mới</router-link>
-        <table class="table table-striped ">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Id</th>
+                    <th>Image</th>
                     <th>Name</th>
-                    <th>Slug</th>
+                    <!-- <th>Slug</th> -->
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-if="products.length > 0" v-for="product in products">
                     <td>{{ product.id }}</td>
+                    <td>
+                    <img :src="`${url_image}${product.img_thumbnail}`" width="50" alt="">
+                    </td>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.slug }}</td>
+                    <!-- <td>{{ product.slug }}</td> -->
                     <td>
                         <button class="btn btn-secondary">Show</button>
                         <button class="btn btn-warning">Edit</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <button @click="onDelete(product.id)" class="btn btn-danger">Delete</button>
                     </td>
                 </tr>
 
@@ -36,16 +40,37 @@
 
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
-
+import { url_image } from '../../../config';
 const products = ref([]);
 const getData = async () => {
     const { data } = await axios.get('/api/admin/products');
-    products.value = data.products
+    products.value = data.products.data
 }
+
+
 
 onMounted(() => {
     getData()
 })
+
+const onDelete = async (id) => {
+
+
+    try {
+
+        const isDelete = confirm('Bạn có chắc muốn xoá sản phảm này không?');
+        if(isDelete){
+            const response = await axios.delete('/api/admin/products/' + id);
+            if(response.data.success){
+                products.value = products.value.filter(product => product.id !== id)
+                alert(response.data.message);
+            }
+        }
+    } catch (error) {
+        alert(response.data.message);
+    }
+
+}
 </script>
 
 <style lang="scss" scoped>
