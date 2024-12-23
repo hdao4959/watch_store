@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -42,16 +45,34 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         try {
+            DB::beginTransaction();
             $data = $request->validated();
-
             $img_thumbnail = Storage::put(self::PATH_IMAGE, $data['img_thumbnail']);
             $data['img_thumbnail'] = $img_thumbnail;
-            Product::create($data);
+            $product = Product::create($data);
+
+            if($data['variants']){
+                $variants_parseJson  = json_decode($data['variants']);
+                $productVariants = [];
+                foreach($variants_parseJson as $variant){
+                    $productVariants[] = [
+                        'product_id' => $product->id,
+                        'size_id' => $variant->size_id,
+                        'color_id' => $variant->color_id,
+                        'price' => $variant->price,
+                        'quantity' => $variant->quantity
+                    ];
+                }
+                ProductVariant::insert($productVariants);
+            }
+
+            DB::commit();
             return response()->json([
                 'success' => true,
-                'message' => 'Thêm mới sản phẩm thành công'
-            ]);
+                'message' => 'Thêm mới sản phẩm thành công!'
+            ],201);
         } catch (\Throwable $th) {
+            DB::rollback();
             return $this->handleErrorNotDefine($th);
         }
     }

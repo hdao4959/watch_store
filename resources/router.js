@@ -7,6 +7,7 @@ import ProductList from './js/Pages/Admin/Product/ProductList.vue';
 import ProductAdd from './js/Pages/Admin/Product/ProductAdd.vue';
 import SizeList from './js/Pages/Admin/Size/SizeList.vue';
 import SizeAdd from './js/Pages/Admin/Size/SizeAdd.vue';
+import ColorList from './js/Pages/Admin/Color/ColorList.vue';
 const routes = [  
     // {  
     //     path: '/',  
@@ -23,6 +24,7 @@ const routes = [
             { path: 'add-product', name: 'add-product', component: ProductAdd},
             { path: 'sizes', name: 'sizes', component: SizeList},
             { path: 'add-size', name: 'add-size', component: SizeAdd},
+            { path: 'colors', name: 'add-size', component: ColorList},
         ]  
     }  
 ];  

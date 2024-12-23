@@ -24,13 +24,12 @@
                 <button @click="onDelete(category.id)" class="btn btn-danger">Delete</button>
               </td>
             </tr>
-            
             <!-- Kiểm tra và hiển thị các danh mục con -->
             <template v-if="category.children && category.children.length > 0">
               <tr v-for="child in category.children" :key="child.id">
                 <td></td> <!-- Tạo khoảng cách cho danh mục con -->
                 <td>
-                  <span>___{{ child.name }}</span>
+                  <span class="text-danger">\___{{ child.name }}</span>
                 </td>
                 <td>{{ child.slug }}</td>
                 <td>
@@ -71,7 +70,6 @@
         }
         }
       const getData = async () => {
-        // Giả sử API trả về cấu trúc dữ liệu như bạn đã cung cấp
         const { data } = await axios.get('/api/admin/categories');
         categories.value = data;
       };

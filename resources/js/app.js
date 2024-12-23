@@ -18,10 +18,17 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 import ClientLayout from './Layouts/ClientLayout.vue';
 import AdminLayout from './Layouts/AdminLayout.vue';
 import router from '../router';
+
+// import CKEditor from '@ckeditor/ckeditor5-vue';
+
+
+
 const app = createApp(AdminLayout);
+
 
 app.use(BootstrapVue3);
 app.use(router);
+// app.use(CKEditor)
 app.mount('#app')
 
 

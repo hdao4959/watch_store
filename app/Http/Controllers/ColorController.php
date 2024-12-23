@@ -10,9 +10,25 @@ class ColorController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function handleErrorNotDefine($th){
+        return response()->json(
+            [
+                'success' => false,
+                'message' => 'Có lỗi xảy ra! ' . $th
+            ],500
+            );
+    }
     public function index()
     {
-        //
+        try {
+            $colors = Color::paginate(10);
+            return response()->json([
+                'success' => true,
+                'colors' => $colors
+            ],200);
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
     }
 
     /**

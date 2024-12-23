@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Size::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Color::class)->constrained()->cascadeOnDelete();
+            $table->decimal('price');
+            $table->decimal('price_sale')->nullable();
             $table->bigInteger('quantity');
             $table->timestamps();
         });

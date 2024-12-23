@@ -25,7 +25,8 @@ class StoreProductRequest extends FormRequest
             'name' => 'required|unique:products,name',
             'slug' => 'required|unique:products,slug',
             'category_id' => 'required|exists:categories,id',
-            'img_thumbnail' => 'required'
+            'img_thumbnail' => 'required',
+            'variants' => 'nullable'
         ];
     }
     protected $stopOnFirstFailure = true;

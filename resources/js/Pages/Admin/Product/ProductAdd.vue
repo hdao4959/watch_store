@@ -6,9 +6,6 @@
 
             <div class="row">
                 <div class="col-md-6">
-
-
-                    <span v-if="error != ''">{{ error }}</span>
                     <div>
                         <label for="">Tên sản phẩm</label>
                         <input class="form-control" type="text" name="name" v-model="productName"
@@ -45,35 +42,51 @@
 
                 <div class="col-md-6">
                     <div>
-                        <label for="">Sizes</label>
-                        <table class="table text-center">
+                        <h4>Biến thể sản phẩm</h4>
+                        <table class="table table-light text-center">
                             <thead>
                                 <tr>
                                     <th>Size</th>
                                     <th>Màu sắc</th>
+                                    <th>Giá bán</th>
                                     <th>Số lượng</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <template v-for="(size, sizeIndex) in sizes" :key="sizeIndex">
                                     <template v-for="(color, colorIndex) in colors" :key="colorIndex">
-                                        <tr v-if="colorIndex === 0">
-                                            <!-- Cột Size: Hiển thị rowspan -->
-                                            <td :rowspan="colors.length">{{ size.name }}mm</td>
-                                            <td :style="`color:${color.name}`">{{ color.name }}</td>
-                                            <td><input type="number"></td>
-                                        </tr>
-                                        <tr v-else>
-                                            <!-- Các hàng sau không hiển thị Size -->
-                                            <td :style="`color:${color.name}`">{{ color.name }}</td>
-                                            <td><input type="number"></td>
-                                        </tr>
+                                       
+                                            <tr v-if="colorIndex === 0">
+                                                <!-- Cột Size: Hiển thị rowspan -->
+                                                <td :rowspan="colors.length">{{ size.name }}mm</td>
+                                                <td :style="`color:${color.name}; font-weight:bold`">{{ color.name }}
+                                                </td>
+                                                <td>
+                                                        <input v-model="variants[size.id][color.id].price" type="number" placeholder="Giá bán" class="text-center">
+                                                </td>
+                                                <td>
+                                                    <input v-model="variants[size.id][color.id].quantity" type="number" placeholder="Số lượng" class="text-center">
+                                                </td>
+                                            </tr>
+                                            <tr v-else>
+                                                <!-- Các hàng sau không hiển thị Size -->
+                                                <td :style="`color:${color.name}; font-weight:bold`">{{ color.name }}
+                                                </td>
+                                                <td>
+                                                        <input v-model="variants[size.id][color.id].price" type="number" placeholder="Giá bán" class="text-center">
+                                                </td>
+                                                <td>
+                                                    <input v-model="variants[size.id][color.id].quantity" type="number" placeholder="Số lượng" class="text-center">
+                                                </td>
+                                            </tr>
+                                    
                                     </template>
                                 </template>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
         </form>
     </div>
@@ -85,6 +98,7 @@ import { onMounted, ref, watch } from 'vue';
 import slugify from 'slugify';
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
 const categories = ref([]);
 const sizes = ref([]);
@@ -93,6 +107,8 @@ const productName = ref('');
 const categoryId = ref('');
 const productSlug = ref('');
 const img_thumbnail = ref(null);
+const variants = ref([]);
+
 
 watch(productName, (newValue) => {
     productSlug.value = slugify(newValue, { lower: true });
@@ -102,23 +118,53 @@ const getCategories = async () => {
     categories.value = data.allCategories
 }
 
-const getSizes = async () => {
-    const { data } = await axios.get('/api/admin/allSizes');
-    sizes.value = data.sizes
+const getSizesAndColors = async () => {
+    const sizesResponse = await axios.get('/api/admin/allSizes');
+    const colorsResponse = await axios.get('/api/admin/allColors');
+    sizes.value = sizesResponse.data.sizes
+    colors.value = colorsResponse.data.colors
+    sizes.value.forEach((size) => {
+        variants.value[size.id] = {},
+            colors.value.forEach((color) => {
+                variants.value[size.id][color.id] = {
+                    quantity: 0,
+                    price: 0
+                }
+            });
+    });
+    
+    
 }
-const getColors = async () => {
-    const { data } = await axios.get('/api/admin/allColors');
-    colors.value = data.colors
-}
+
+
 onMounted(() => {
     getCategories();
-    getSizes();
-    getColors();
+    getSizesAndColors()
+
+
 })
 
 const handleUploadImage = (event) => {
     img_thumbnail.value = event.target.files[0]
 }
+
+const prepareVariantsData = () => {
+    const result = [];
+    Object.entries(variants.value).forEach(([sizeId, colorData]) => {
+        Object.entries(colorData).forEach(([colorId, data]) => {
+            if (data.quantity > 0 ) {
+                result.push({
+                    size_id: sizeId,
+                    color_id: colorId,
+                    price: data.price,
+                    quantity: data.quantity,
+                });
+            }
+        });
+    });
+    return result;
+};
+
 const onSubmit = async () => {
     const formData = new FormData();
     formData.append('name', productName.value)
@@ -126,15 +172,16 @@ const onSubmit = async () => {
     formData.append('category_id', categoryId.value)
     formData.append('img_thumbnail', img_thumbnail.value)
 
+    const variantsData = prepareVariantsData(); // Tạo dữ liệu `variants` từ hàm bên dưới
+    formData.append('variants', JSON.stringify(variantsData)); 
+
+
     try {
         const response = await axios.post('/api/admin/products', formData);
-
         if (response.data.success) {
             alert(response.data.message);
             router.push('/products')
         }
-
-
     } catch (error) {
         alert(error.response?.data?.message || 'Đã xảy ra lỗi không xác định');
     }

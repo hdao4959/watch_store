@@ -19,7 +19,7 @@
             <router-link class="nav-link text-white" to="/sizes">Sizes</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-white" to="/settings">Cài đặt</router-link>
+            <router-link class="nav-link text-white" to="/colors">Màu sắc</router-link>
           </li>
         </ul>
       </nav>

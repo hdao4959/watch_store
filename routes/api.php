@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\ControllerForForm;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
@@ -34,5 +35,6 @@ Route::prefix('/admin')->group(function(){
     });
     Route::apiResource('/products', ProductController::class);
     Route::apiResource('/sizes', SizeController::class);
+    Route::apiResource('/colors', ColorController::class);
 
 });
