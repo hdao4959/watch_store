@@ -22,7 +22,7 @@
                     <td>{{ product.name }}</td>
                     <!-- <td>{{ product.slug }}</td> -->
                     <td>
-                        <button class="btn btn-secondary">Show</button>
+                        <router-link class="btn btn-secondary" :to="{name: 'detail-product', params:{id: product.id}}">Show</router-link> 
                         <button class="btn btn-warning">Edit</button>
                         <button @click="onDelete(product.id)" class="btn btn-danger">Delete</button>
                     </td>
@@ -38,15 +38,14 @@
 
 <script setup>
 
-import axios from 'axios';
+import AdminApi from '../../../config';
 import { onMounted, ref } from 'vue';
 import { url_image } from '../../../config';
 const products = ref([]);
 const getData = async () => {
-    const { data } = await axios.get('/api/admin/products');
+    const { data } = await AdminApi.get('/products');
     products.value = data.products.data
 }
-
 
 
 onMounted(() => {
@@ -60,7 +59,7 @@ const onDelete = async (id) => {
 
         const isDelete = confirm('Bạn có chắc muốn xoá sản phảm này không?');
         if(isDelete){
-            const response = await axios.delete('/api/admin/products/' + id);
+            const response = await AdminApi.delete('/products/' + id);
             if(response.data.success){
                 products.value = products.value.filter(product => product.id !== id)
                 alert(response.data.message);

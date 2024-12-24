@@ -15,20 +15,14 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
  * to use in your application's views. An example is included for you.
  */
 
-import ClientLayout from './Layouts/ClientLayout.vue';
-import AdminLayout from './Layouts/AdminLayout.vue';
 import router from '../router';
-
-// import CKEditor from '@ckeditor/ckeditor5-vue';
-
+import App from './App.vue';
 
 
-const app = createApp(AdminLayout);
-
+const app = createApp(App);
 
 app.use(BootstrapVue3);
 app.use(router);
-// app.use(CKEditor)
 app.mount('#app')
 
 

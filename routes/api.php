@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\ControllerForForm;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SizeController;
-use App\Models\Product;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\ControllerForForm;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
+use App\Http\Controllers\Client\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +27,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('/admin')->group(function(){
     Route::apiResource('/categories', CategoryController::class);
-
     Route::controller(ControllerForForm::class)->group(function(){
             Route::get('parentCategories', 'parentCategories');
             Route::get('allCategories', 'allCategories');
@@ -36,5 +36,7 @@ Route::prefix('/admin')->group(function(){
     Route::apiResource('/products', ProductController::class);
     Route::apiResource('/sizes', SizeController::class);
     Route::apiResource('/colors', ColorController::class);
-
 });
+
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/categories', [ClientCategoryController::class, 'index']);

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -80,9 +81,28 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(string $id)
     {
-        //
+        try {
+            $product = Product::with([
+                'category.parent',
+                'variants.size',
+                'variants.color' 
+            ])->where('id', $id)->first();
+            if(!$product){
+                return response()->json([
+                    'success' => false,
+                    'message' => "Sản phẩm này không tồn tại"
+                ],404);
+            }
+            return response()->json([
+                'success' => true,
+                'product' => $product
+            ]);
+
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
     }
 
     /**
@@ -107,18 +127,21 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         try {
+            DB::beginTransaction();
             $product = Product::where('id', $id)->first();
             $product->delete();
+            ProductVariant::where('product_id', $product->id)->delete();
 
             if($product->img_thumbnail && Storage::exists($product->img_thumbnail)){
                 Storage::delete($product->img_thumbnail);
             }
-
+            DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Xoá sản phẩm thành công!'
             ],200);
         } catch (\Throwable $th) {
+            DB::rollback();
             return $this->handleErrorNotDefine($th);
         }
     }

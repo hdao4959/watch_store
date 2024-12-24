@@ -1,5 +1,5 @@
 <template>
-    <div class="admin-layout">
+    <div class="admin-layout" id="admin">
       <!-- Sidebar -->
       <nav class="sidebar bg-dark text-white">
         <div class="sidebar-header text-center py-3">
@@ -7,19 +7,19 @@
         </div>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <router-link class="nav-link text-white" to="/">Trang chủ</router-link>
+            <router-link class="nav-link text-white" to="/admin/">Trang chủ</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-white" to="/categories">Danh mục</router-link>
+            <router-link class="nav-link text-white" to="/admin/categories">Danh mục</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-white" to="/products">Sản phẩm</router-link>
+            <router-link class="nav-link text-white" to="/admin/products">Sản phẩm</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-white" to="/sizes">Sizes</router-link>
+            <router-link class="nav-link text-white" to="/admin/sizes">Sizes</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link text-white" to="/colors">Màu sắc</router-link>
+            <router-link class="nav-link text-white" to="/admin/colors">Màu sắc</router-link>
           </li>
         </ul>
       </nav>

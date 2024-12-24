@@ -21,7 +21,7 @@
                         <select class="form-control" form="form-control" name="" v-model="categoryId" id="">
                             <option value="">--Danh mục--</option>
                             <template v-if="categories.length > 0" v-for="category in categories">
-                                <option :value=category.id class="text-success">{{ category.name }}</option>
+                              <option :value=category.id class="text-success">{{ category.name }}</option>
                                 <template v-if="category.children.length > 0" v-for="cate in category.children">
                                     <option :value=cate.id class="text-danger">\__{{ cate.name }}</option>
                                 </template>
@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import axios from 'axios';
+import AdminApi from '../../../config.js'
 import { onMounted, ref, watch } from 'vue';
 import slugify from 'slugify';
 import { useRouter } from 'vue-router';
@@ -114,13 +114,13 @@ watch(productName, (newValue) => {
     productSlug.value = slugify(newValue, { lower: true });
 })
 const getCategories = async () => {
-    const { data } = await axios.get('/api/admin/allCategories');
+    const { data } = await AdminApi.get('/allCategories');
     categories.value = data.allCategories
 }
 
 const getSizesAndColors = async () => {
-    const sizesResponse = await axios.get('/api/admin/allSizes');
-    const colorsResponse = await axios.get('/api/admin/allColors');
+    const sizesResponse = await AdminApi.get('/allSizes');
+    const colorsResponse = await AdminApi.get('/allColors');
     sizes.value = sizesResponse.data.sizes
     colors.value = colorsResponse.data.colors
     sizes.value.forEach((size) => {
@@ -177,10 +177,14 @@ const onSubmit = async () => {
 
 
     try {
-        const response = await axios.post('/api/admin/products', formData);
+        const response = await AdminApi.post('/products', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         if (response.data.success) {
             alert(response.data.message);
-            router.push('/products')
+            router.push('/admin/products')
         }
     } catch (error) {
         alert(error.response?.data?.message || 'Đã xảy ra lỗi không xác định');
