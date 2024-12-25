@@ -16,7 +16,11 @@ class ProductController extends Controller{
     }
     public function show(string $slug){
         try {
-            $product = Product::where('slug', $slug)->first();
+            $product = Product::with([
+                'category.parent',
+                'variants.size',
+                'variants.color',
+            ])->where('slug', $slug)->first();
             if(!$product){
                 return response()->json([
                     'success' => false,

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,4 @@ Route::prefix('/admin')->group(function(){
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/categories', [ClientCategoryController::class, 'index']);
+Route::get('/products/{slug}', [ClientProductController::class, 'show']);

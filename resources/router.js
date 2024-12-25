@@ -11,14 +11,15 @@ import ColorList from './js/Pages/Admin/Color/ColorList.vue';
 import ProductDetail from './js/Pages/Admin/Product/ProductDetail.vue';
 import Home from './js/Pages/Client/Home.vue';
 import Category from './js/Pages/Client/Category.vue';
+import ProductDetailClient from './js/Pages/Client/ProductDetail.vue';
 const routes = [
     {
         path: '/',
         component: ClientLayout,
         children: [
             { path: '', name: 'home', component: Home },
-            { path: '/categories/:slug', name: 'product-of-category', component: Category
-            },
+            { path: '/categories/:slug', name: 'product-of-category', component: Category},
+            { path: '/products/:slug',name: 'product-detail', component: ProductDetailClient}
         ],
     },
 
