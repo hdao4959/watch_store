@@ -1,6 +1,7 @@
 <template>
     <div id="client">
         <Menu/>
+        <Banner/>
         <main>
             <router-view class="mt-2"></router-view>
         </main>
@@ -8,6 +9,7 @@
 </template>
 
 <script setup>
+import Banner from '../components/Client/Banner.vue';
 import Menu from '../components/Client/Menu.vue';
 
 const name = 'ClientLayout'

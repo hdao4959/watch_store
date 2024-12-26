@@ -3,8 +3,9 @@
         <div class="row">
             <!-- Hình ảnh sản phẩm -->
             <div class="col-md-6">
-                <div class="text-center" >
-                    <img width="60%" class="img-fluid" :src="`${url_image}${product.img_thumbnail}`" alt="Hình ảnh sản phẩm">
+                <div class="text-center">
+                    <img width="60%" class="img-fluid" :src="`${url_image}${product.img_thumbnail}`"
+                        alt="Hình ảnh sản phẩm">
                 </div>
             </div>
 
@@ -15,21 +16,40 @@
                     Dòng: {{ product?.category?.parent?.name }} {{ product?.category?.name }}
                 </h5>
 
-                <div class="row_color">
-                Màu sắc: 
-                    <template v-if="product.variants" v-for="(variant, index) in product.variants" :key="index">
-                        <button :class="{active: activeIndex == index  }" @click="handleActive(index)" class="button_color">{{ variant.color.name }} <div class="icon_check"><i class="fa-solid fa-check"></i></div></button>
-                        
+                <div class="row_color my-2">
+                    Màu sắc:
+                    <template v-if="colors" v-for="(color, index) in colors" :key="index">
+                        <button :class="{ active: activeColor == color.color.id }" @click="handleActiveColor(color.color.id)"
+                            class="button_select">{{ color.color.name }} <div class="icon_check"><i
+                                    class="fa-solid fa-check"></i></div></button>
+
                     </template>
                 </div>
-                Kích cỡ
                 <div class="row_size">
-                    <template v-if="sizes" v-for="(size) in sizes" >
-                        <button class="button_size">{{ size.size.name }}mm <div class="icon_check"><i class="fa-solid fa-check"></i></div></button>
+                    Kích cỡ: 
+                    <template v-if="sizes.length > 0" v-for="(variant, index) in sizes" :key="index">
+                        <button :class="{ active: activeSize == variant.size.id }" @click="handleActiveSize(variant.size.id)" class="button_select mx-1">
+                            {{ variant.size.name }}mm
+                            <div class="icon_check"><i class="fa-solid fa-check"></i></div>
+                        </button>
                     </template>
+                    <div v-else>
+                        <span>Vui lòng chọn màu để hiển thị kích cỡ.</span>
+                    </div>
                 </div>
 
-                
+                <div class="mt-2">
+                Giá: <span class="price" v-if="price != null">{{ price }}</span>
+                </div>
+                <div class="mt-2">
+                Số lượng: <input class="text-center" style="width:70px" min="1" value="1" type="number" name="" id="">
+                </div>
+                <div class="group_button_buy row row-cols-3  my-3 gap-2">
+                    <div class="button_buynow col btn btn-danger" ><i class="fa-solid fa-bag-shopping"></i> Mua ngay</div>
+                    <div class="button_add_cart col btn btn-warning"> <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ hàng </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -42,15 +62,21 @@ import { ClientApi, url_image } from '../../config';
 import { computed, onMounted, ref } from 'vue';
 
 
-const activeIndex = ref(false);
+
 const { params } = useRoute();
 const product = ref({});
 const sizes = ref([]);
+const colors = ref([]);
+const price = ref(null);
 const getData = async (slug) => {
     const { data } = await ClientApi.get('/products/' + slug);
     product.value = data.product;
+    setDefaultSize();
+    setDefaultColor();
+ 
+};
 
-    // Lọc các kích thước duy nhất
+const setDefaultSize = () => {
     const seen = new Set();
     sizes.value = product.value.variants
         ?.filter((variant) => {
@@ -61,20 +87,62 @@ const getData = async (slug) => {
             }
             return false;
         });
-};
 
+}
 
+const setDefaultColor = () => {
+    const seen = new Set();
+    colors.value = product.value.variants.filter((variant) => {
+        const isDuplicate = seen.has(variant.color.id);
+        if(!isDuplicate){
+            seen.add(variant.color.id);
+            return true
+        }
+        return false
+    });
+}
 
-
-const handleActive = (index) => {
-    if(index === activeIndex.value){
-        activeIndex.value = null
+const showPrice = () => {
+    if (activeColor.value != null && activeSize.value != null) {
+        const variant = product.value.variants.find(
+            (variant) => variant.color_id == activeColor.value && variant.size_id == activeSize.value );
+        price.value = variant ? variant.price : null
     }else{
-        activeIndex.value = index
-    }
+        price.value = null
+    } 
     
 }
 
+
+const activeColor = ref(null);
+const activeSize = ref(null);
+// Khi chọn một màu, lọc ra các size tương ứng
+const handleActiveColor = (color_id) => {
+    if (color_id == activeColor.value) {
+        activeColor.value = null;
+        setDefaultSize()
+        
+    } 
+    else {
+        activeColor.value = color_id;
+        // Lấy các size tương ứng với màu được chọn
+        sizes.value = product.value.variants.filter(variant => variant.color_id === color_id);
+        showPrice()
+    }
+
+    console.log(sizes.value);
+    
+    
+};
+
+const handleActiveSize = (size_id) => {
+    if(size_id == activeSize.value){
+        activeSize.value = null
+    }else{
+        activeSize.value = size_id
+        showPrice()
+    }
+}
 
 
 onMounted(() => {
@@ -84,40 +152,49 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
-.row_color{
+.row_color {
     display: flex;
     justify-content: start;
     flex-wrap: wrap;
 }
 
-.button_color{
+.button_select {
     position: relative;
     text-align: center;
     width: 50px;
-    height:30px;
+    height: 30px;
     margin: 0 5px 0 5px;
     border: 1px solid gray;
     align-content: center;
 
-    
+
 }
 
-.icon_check{
+.icon_check {
     display: none;
     position: absolute;
     bottom: -7px;
     right: 0px;
-    .fa-check{
+
+    .fa-check {
         font-size: 10px;
     }
 }
-.button_color.active{
-        color: orangered;
-        border: 1px solid orangered;
-        .icon_check{
-            display: block;
-        }
+
+.button_select.active {
+    color: orangered;
+    border: 1px solid orangered;
+
+        // .icon_check {
+        //     display: block;
+        // }
 }
+
+.price{
+    color: red;
+    font-size: large;
+    font-weight: bold;
+}
+
 
 </style>
