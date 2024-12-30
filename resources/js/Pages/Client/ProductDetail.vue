@@ -10,13 +10,13 @@
             </div>
 
             <!-- Thông tin sản phẩm -->
-            <div class="col-md-6">
+            <div v-if="product?.category?.name" class="col-md-6">
                 <h3>{{ product.name }}</h3>
                 <h5 class="text-success">
                     Dòng: {{ product?.category?.parent?.name }} {{ product?.category?.name }}
                 </h5>
 
-                <div class="row_color my-2">
+                <div v-if="colors.length > 0" class="row_color my-2">
                     Màu sắc:
                     <template v-if="colors" v-for="(color, index) in colors" :key="index">
                         <button :class="{ active: activeColor == color.color.id }" @click="handleActiveColor(color.color.id)"
@@ -25,10 +25,10 @@
 
                     </template>
                 </div>
-                <div class="row_size">
+                <div v-if="sizes.length > 0 " class="row_size">
                     Kích cỡ: 
                     <template v-if="sizes.length > 0" v-for="(variant, index) in sizes" :key="index">
-                        <button :class="{ active: activeSize == variant.size.id }" @click="handleActiveSize(variant.size.id)" class="button_select mx-1">
+                        <button  :class="{ active: activeSize == variant.size.id, 'disabled-button':variant.quantity <= 0  }"   @click="handleActiveSize(variant.size.id)" class="button_select mx-1">
                             {{ variant.size.name }}mm
                             <div class="icon_check"><i class="fa-solid fa-check"></i></div>
                         </button>
@@ -42,11 +42,11 @@
                 Giá: <span class="price" v-if="price != null">{{ price }}</span>
                 </div>
                 <div class="mt-2">
-                Số lượng: <input class="text-center" style="width:70px" min="1" value="1" type="number" name="" id="">
+                Số lượng: <input class="text-center" style="width:70px" min="1" max="10" value="1" type="number" name="" id="">
                 </div>
                 <div class="group_button_buy row row-cols-3  my-3 gap-2">
-                    <div class="button_buynow col btn btn-danger" ><i class="fa-solid fa-bag-shopping"></i> Mua ngay</div>
-                    <div class="button_add_cart col btn btn-warning"> <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ hàng </div>
+                    <button type="submit"  class="button_buynow col btn btn-danger" ><i class="fa-solid fa-bag-shopping"></i> Mua ngay</button>
+                    <button class="button_add_cart col btn btn-warning"> <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ hàng </button>
                 </div>
 
 
@@ -106,7 +106,7 @@ const showPrice = () => {
     if (activeColor.value != null && activeSize.value != null) {
         const variant = product.value.variants.find(
             (variant) => variant.color_id == activeColor.value && variant.size_id == activeSize.value );
-        price.value = variant ? variant.price : null
+        price.value = variant ? formatPrice(variant.price) : null
     }else{
         price.value = null
     } 
@@ -129,10 +129,6 @@ const handleActiveColor = (color_id) => {
         sizes.value = product.value.variants.filter(variant => variant.color_id === color_id);
         showPrice()
     }
-
-    console.log(sizes.value);
-    
-    
 };
 
 const handleActiveSize = (size_id) => {
@@ -149,6 +145,13 @@ onMounted(() => {
     getData(params.slug)
 })
 
+
+const formatPrice = (price) => {
+    return  new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    }).format(price)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -194,6 +197,13 @@ onMounted(() => {
     color: red;
     font-size: large;
     font-weight: bold;
+}
+
+.disabled-button {
+  background-color: #ccc;
+  color: #707070;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 

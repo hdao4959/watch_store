@@ -5,11 +5,13 @@
         <main>
             <router-view class="mt-2"></router-view>
         </main>
+        <Footer/>
     </div>
 </template>
 
 <script setup>
 import Banner from '../components/Client/Banner.vue';
+import Footer from '../components/Client/Footer.vue';
 import Menu from '../components/Client/Menu.vue';
 
 const name = 'ClientLayout'

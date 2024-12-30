@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ControllerForForm;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
@@ -22,9 +23,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::middleware('auth:sanctum')->group(function(){
+
+    Route::controller(AuthController::class)->group(function(){
+        Route::get('/user',  'infor');
+        Route::post('/logout',  'logout');
+    });
 });
+
 
 Route::prefix('/admin')->group(function(){
     Route::apiResource('/categories', CategoryController::class);
@@ -42,3 +52,10 @@ Route::prefix('/admin')->group(function(){
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/categories', [ClientCategoryController::class, 'index']);
 Route::get('/products/{slug}', [ClientProductController::class, 'show']);
+
+
+Route::controller(AuthController::class)->group(function(){
+    Route::post('register', 'register');
+    Route::post('login', 'login');
+
+});
