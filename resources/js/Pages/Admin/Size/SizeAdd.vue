@@ -15,16 +15,16 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import AdminApi from '../../../config';
 
 const router = useRouter();
 const sizeName = ref('');
 const onSubmit = async () => {
 
     try {
-        const { data } = await axios.post('/api/admin/sizes', { name: sizeName.value });
+        const { data } = await AdminApi.post('/sizes', { name: sizeName.value });
         alert(data.message);
         router.push('/sizes');
     } catch (error) {

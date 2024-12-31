@@ -95,6 +95,7 @@ const register = async () => {
                 
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('account_name', data.account_name);
+                localStorage.setItem('role', 2);
                 route.push('/');
             }
             

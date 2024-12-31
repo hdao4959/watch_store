@@ -1,14 +1,32 @@
 import axios from "axios"
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 export const url_image = 'http://127.0.0.1:8000/storage/'
 
+const router = useRouter();
+
+
+const token = localStorage.getItem('token');
 const AdminApi = axios.create({
     baseURL: '/api/admin',
-    timeout:10000,
-    headers:{
-        'Content-Type': 'application/json'
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
     }
 })
+    
+// AdminApi.interceptors.response.use(config => {
+//     const token = localStorage.getItem('token') || '';
+//     if(token){
+//         config.headers.Authorization = `Bearer ${token}`
+//     }
+//     return config
+// }, error => {
+//     return Promise.reject(error)
+// })
+
 
 export const ClientApi = axios.create({
     baseURL: '/api',

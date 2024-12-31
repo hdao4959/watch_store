@@ -41,8 +41,6 @@ onMounted(() => {
 })
 
 const logout = async () => {
-
-    
     try {
         const token = localStorage.getItem('token');
         const {data} = await ClientApi.post('/logout', {}, {

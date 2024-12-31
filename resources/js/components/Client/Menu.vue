@@ -21,10 +21,11 @@
                 <ul  class="col nav_right">
                 <div class="text-end mt-2 ">
                     
-                    <i class="icons fa-solid fa-cart-shopping mx-2"></i>
+                    <router-link to="/cart"  ><i class="icons fa-solid fa-cart-shopping mx-2"></i></router-link>
+                    
                     <template v-if="account_name">
                         <router-link to="/account">{{ account_name }}</router-link>
-                        <button @click="logout" class="btn btn-danger">Đăng xuất</button>
+                        <!-- <button @click="logout" class="btn btn-danger">Đăng xuất</button> -->
                     </template>
                     <template v-else>
                     <router-link to="/login"  v-if="!account_name">Đăng nhập</router-link>
@@ -60,7 +61,8 @@ onMounted(() => {
 
 const logout = async () => {
 try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
+    
     const {data} = await ClientApi.post('/logout', {}, {
         headers: {
             Authorization: `Bearer ${token}`

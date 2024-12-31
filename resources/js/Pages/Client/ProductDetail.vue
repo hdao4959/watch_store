@@ -19,16 +19,18 @@
                 <div v-if="colors.length > 0" class="row_color my-2">
                     Màu sắc:
                     <template v-if="colors" v-for="(color, index) in colors" :key="index">
-                        <button :class="{ active: activeColor == color.color.id }" @click="handleActiveColor(color.color.id)"
-                            class="button_select">{{ color.color.name }} <div class="icon_check"><i
-                                    class="fa-solid fa-check"></i></div></button>
+                        <button :class="{ active: activeColor == color.color.id }"
+                            @click="handleActiveColor(color.color.id)" class="button_select">{{ color.color.name }} <div
+                                class="icon_check"><i class="fa-solid fa-check"></i></div></button>
 
                     </template>
                 </div>
-                <div v-if="sizes.length > 0 " class="row_size">
-                    Kích cỡ: 
+                <div v-if="sizes.length > 0" class="row_size">
+                    Kích cỡ:
                     <template v-if="sizes.length > 0" v-for="(variant, index) in sizes" :key="index">
-                        <button  :class="{ active: activeSize == variant.size.id, 'disabled-button':variant.quantity <= 0  }"   @click="handleActiveSize(variant.size.id)" class="button_select mx-1">
+                        <button
+                            :class="{ active: activeSize == variant.size.id, 'disabled-button': variant.quantity <= 0 }"
+                            @click="handleActiveSize(variant.size.id)" class="button_select mx-1">
                             {{ variant.size.name }}mm
                             <div class="icon_check"><i class="fa-solid fa-check"></i></div>
                         </button>
@@ -39,14 +41,18 @@
                 </div>
 
                 <div class="mt-2">
-                Giá: <span class="price" v-if="price != null">{{ price }}</span>
+                    Giá: <span class="price" v-if="price != null">{{ price }}</span>
                 </div>
                 <div class="mt-2">
-                Số lượng: <input class="text-center" style="width:70px" min="1" max="10" value="1" type="number" name="" id="">
+                    Số lượng: <input class="text-center" style="width:70px" min="1" max="10" v-model="quantity"
+                        value="1" type="number" name="" id="">
                 </div>
                 <div class="group_button_buy row row-cols-3  my-3 gap-2">
-                    <button type="submit"  class="button_buynow col btn btn-danger" ><i class="fa-solid fa-bag-shopping"></i> Mua ngay</button>
-                    <button class="button_add_cart col btn btn-warning"> <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ hàng </button>
+                    <button type="submit" class="button_buynow col btn btn-danger"><i
+                            class="fa-solid fa-bag-shopping"></i> Mua
+                        ngay</button>
+                    <button @click="handleAddCart" class="button_add_cart col btn btn-warning"> <i
+                            class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ hàng </button>
                 </div>
 
 
@@ -60,7 +66,7 @@
 import { useRoute } from 'vue-router';
 import { ClientApi, url_image } from '../../config';
 import { computed, onMounted, ref } from 'vue';
-
+import { formatPrice } from '../../utils/formatPrice';
 
 
 const { params } = useRoute();
@@ -73,7 +79,7 @@ const getData = async (slug) => {
     product.value = data.product;
     setDefaultSize();
     setDefaultColor();
- 
+
 };
 
 const setDefaultSize = () => {
@@ -94,7 +100,7 @@ const setDefaultColor = () => {
     const seen = new Set();
     colors.value = product.value.variants.filter((variant) => {
         const isDuplicate = seen.has(variant.color.id);
-        if(!isDuplicate){
+        if (!isDuplicate) {
             seen.add(variant.color.id);
             return true
         }
@@ -105,24 +111,25 @@ const setDefaultColor = () => {
 const showPrice = () => {
     if (activeColor.value != null && activeSize.value != null) {
         const variant = product.value.variants.find(
-            (variant) => variant.color_id == activeColor.value && variant.size_id == activeSize.value );
+            (variant) => variant.color_id == activeColor.value && variant.size_id == activeSize.value);
         price.value = variant ? formatPrice(variant.price) : null
-    }else{
+    } else {
         price.value = null
-    } 
-    
+    }
+
 }
 
 
 const activeColor = ref(null);
 const activeSize = ref(null);
+const quantity = ref(1);
 // Khi chọn một màu, lọc ra các size tương ứng
 const handleActiveColor = (color_id) => {
     if (color_id == activeColor.value) {
         activeColor.value = null;
         setDefaultSize()
-        
-    } 
+
+    }
     else {
         activeColor.value = color_id;
         // Lấy các size tương ứng với màu được chọn
@@ -132,9 +139,9 @@ const handleActiveColor = (color_id) => {
 };
 
 const handleActiveSize = (size_id) => {
-    if(size_id == activeSize.value){
+    if (size_id == activeSize.value) {
         activeSize.value = null
-    }else{
+    } else {
         activeSize.value = size_id
         showPrice()
     }
@@ -146,11 +153,35 @@ onMounted(() => {
 })
 
 
-const formatPrice = (price) => {
-    return  new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-    }).format(price)
+const handleAddCart = () => {
+    if (!activeColor.value || !activeSize.value) {
+        alert('Vui lòng chọn Màu sắc và Kích cỡ!');
+    } else {
+
+        const newProduct = {
+            id: product.value.id,
+            size: activeSize.value,
+            color: activeColor.value,
+            quantity: quantity.value
+        }
+
+        const cart = JSON.parse(sessionStorage.getItem('cart')) ?? [];
+// Kiểm tra tồn tại trong giỏ hàng
+        const existProductInCart = cart.find((item) =>
+            item.id == newProduct.id
+            && item.size == newProduct.size
+            && item.color == newProduct.color);
+
+        if (existProductInCart) {
+            existProductInCart.quantity += newProduct.quantity
+        } else {
+            cart.push(newProduct)
+        }
+
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        alert('Thêm sản phẩm vào giỏ hàng thành công!')
+    }
+
 }
 </script>
 
@@ -188,23 +219,21 @@ const formatPrice = (price) => {
     color: orangered;
     border: 1px solid orangered;
 
-        // .icon_check {
-        //     display: block;
-        // }
+    // .icon_check {
+    //     display: block;
+    // }
 }
 
-.price{
+.price {
     color: red;
     font-size: large;
     font-weight: bold;
 }
 
 .disabled-button {
-  background-color: #ccc;
-  color: #707070;
-  cursor: not-allowed;
-  pointer-events: none;
+    background-color: #ccc;
+    color: #707070;
+    cursor: not-allowed;
+    pointer-events: none;
 }
-
-
 </style>

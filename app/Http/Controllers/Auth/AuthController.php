@@ -42,7 +42,8 @@ class AuthController extends Controller
                 return response()->json([
                     'success' => true, 
                     'token' => $token,
-                    'account_name' => $account_name
+                    'account_name' => $account_name,
+                    'role' => $account->role
                 ]);
             }
             return response()->json([
@@ -65,7 +66,7 @@ class AuthController extends Controller
                 ],422);
             }
 
-
+            $data['role'] = '2';
             $user = User::create($data);
             $token = $user->createToken($user->id)->plainTextToken;
             $account_name = strstr($user->email, '@', true);

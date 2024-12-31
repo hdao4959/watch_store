@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ControllerForForm;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
@@ -27,35 +28,36 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
 
-    Route::controller(AuthController::class)->group(function(){
+    Route::controller(AuthController::class)->group(function () {
         Route::get('/user',  'infor');
         Route::post('/logout',  'logout');
     });
-});
 
 
-Route::prefix('/admin')->group(function(){
-    Route::apiResource('/categories', CategoryController::class);
-    Route::controller(ControllerForForm::class)->group(function(){
+
+    Route::middleware('role:0')->prefix('/admin')->group(function () {
+        Route::apiResource('/categories', CategoryController::class);
+        Route::controller(ControllerForForm::class)->group(function () {
             Route::get('parentCategories', 'parentCategories');
             Route::get('allCategories', 'allCategories');
             Route::get('allSizes', 'allSizes');
             Route::get('allColors', 'allColors');
+        });
+        Route::apiResource('/products', ProductController::class);
+        Route::apiResource('/sizes', SizeController::class);
+        Route::apiResource('/colors', ColorController::class);
     });
-    Route::apiResource('/products', ProductController::class);
-    Route::apiResource('/sizes', SizeController::class);
-    Route::apiResource('/colors', ColorController::class);
 });
+
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/categories', [ClientCategoryController::class, 'index']);
 Route::get('/products/{slug}', [ClientProductController::class, 'show']);
+Route::post('/cart', [CartController::class, 'getItemsCart']);
 
-
-Route::controller(AuthController::class)->group(function(){
+Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
-
 });

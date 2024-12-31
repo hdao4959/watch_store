@@ -71,7 +71,11 @@ const submit_login = async () => {
     if(data.success == true && data.token){
         localStorage.setItem('token', data.token);
         localStorage.setItem('account_name', data.account_name);
-        router.push('/');
+        if(data.role == '0'){
+            window.location.href = '/admin'
+        }else{
+            window.location.href = '/'
+        }
     }
 } catch (e) {
         error.value.message = e.response.data.message

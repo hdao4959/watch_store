@@ -15,6 +15,7 @@ import ProductDetailClient from './js/Pages/Client/ProductDetail.vue';
 import Register from './js/Pages/Auth/Register.vue';
 import Account from './js/Pages/Client/Account.vue';
 import Login from './js/Pages/Auth/Login.vue';
+import Cart from './js/Pages/Client/Cart.vue';
 const routes = [
     {
         path: '/',
@@ -23,9 +24,10 @@ const routes = [
             { path: '', name: 'home', component: Home },
             { path: '/categories/:slug', name: 'product-of-category', component: Category},
             { path: '/products/:slug',name: 'product-detail', component: ProductDetailClient}, 
-            { path: '/register', component: Register},
-            { path: '/account', component: Account},
-            { path: '/login', component: Login}
+            { path: '/register', name: 'register', component: Register},
+            { path: '/account', name: 'account', component: Account},
+            { path: '/login', name: 'login', component: Login},
+            { path: '/cart', name: 'cart', component: Cart}
         ],
     },
 

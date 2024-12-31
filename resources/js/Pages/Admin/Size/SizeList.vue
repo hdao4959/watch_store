@@ -27,14 +27,14 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import AdminApi from '../../../config';
 const sizes = ref([]);
 
 const getData = async () => {
 
     try {
-        const {data} = await axios.get('/api/admin/sizes');
+        const {data} = await AdminApi.get('/sizes');
         sizes.value = data.sizes.data
     } catch (error) {
         console.log(error.response.data.message);
@@ -46,7 +46,7 @@ const onDelete = async (id) => {
     try {
         const isConfirm = confirm('Bạn có chắc muốn xoá size này không?');
         if(isConfirm){
-            const {data} = await axios.delete('/api/admin/sizes/' + id);
+            const {data} = await AdminApi.delete('/sizes/' + id);
             alert(data?.message);
             sizes.value = sizes.value.filter(size => size.id !== id);
         }

@@ -27,14 +27,14 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import AdminApi from '../../../config';
 const colors = ref([]);
 
 const getData = async () => {
 
     try {
-        const {data} = await axios.get('/api/admin/colors');
+        const {data} = await AdminApi.get('/colors');
         colors.value = data.colors.data
     } catch (error) {
         console.log(error.response.data.message);
@@ -46,7 +46,7 @@ const onDelete = async (id) => {
     try {
         const isConfirm = confirm('Bạn có chắc muốn xoá màu này không?');
         if(isConfirm){
-            const {data} = await axios.delete('/api/admin/colors/' + id);
+            const {data} = await AdminApi.delete('/colors/' + id);
             alert(data?.message);
             colors.value = colors.value.filter(size => size.id !== id);
         }
