@@ -3,30 +3,36 @@
         <h2 class="text-center">Giỏ hàng</h2>
 
         <div class="cart-list">
-            <div class="cart-item" v-for="item in listItems">
-                <img
-                    class="product-img"
-                    :src="`${url_image}${item.img_thumbnail}`"
-                    :alt="`${item.name}`"
-                />
-                <div class="product-details">
-                    <h4 class="product-name">{{ item.name }} {{  item.variant.color.name }} {{ item.variant.size.name }}mm</h4>
-                    <p class="product-price">Giá: {{formatPrice(item.quantity * item.variant.price)}}</p>
-                    <div class="quantity-control">
-                        <button class="quantity-btn">-</button>
-                        <input type="number" class="quantity-input" :value="`${item.quantity}`" />
-                        <button class="quantity-btn">+</button>
-                    </div>
-                </div>
-                <button class="remove-btn">Xóa</button>
-            </div>
 
+            <template v-for="c in cart">
+                <template v-for="item in listItems">
+                            
+                            <div v-if="c.id == item.product_id && c.size == item.size_id && c.color == item.color_id" class="cart-item">
+                                <img class="product-img" :src="`${url_image}${item.img_thumbnail}`"
+                                    :alt="`${item.name}`" />
+                                <div class="product-details">
+                                    <h4 class="product-name">{{ item.product_name }} <span>{{ item.color_name }}</span> <span>{{
+                                            item.size_name }}mm</span></h4>
+                                    <p class="product-price">Giá: {{formatPrice(c.quantity * item.price)}}</p>
+                                    <div class="quantity-control">
+                                        <button class="quantity-btn">-</button>
+                                        <input type="number" class="quantity-input" :id="`item_${c.id}_${c.color}_${c.size}`" @input="updateQuantity(c.id, c.color, c.size)" v-model="c.quantity" min="1" />
+                                        <button class="quantity-btn">+</button>
+                                        
+                                    </div>
+                                </div>
+                                <button @click="deleteItem(c.id, c.color, c.size)" class="remove-btn">Xóa</button>
+                            </div>
 
+                </template>
+            </template>
+
+ 
 
         </div>
 
         <div class="cart-footer">
-            <h4 class="total-price">Tổng cộng: 50.000.000₫</h4>
+            <h4 class="total-price">{{ formatPrice(totalPrice) }}</h4>
             <button class="checkout-btn">Thanh toán</button>
         </div>
     </div>
@@ -38,32 +44,64 @@ import { ClientApi, url_image } from '../../config';
 import { formatPrice } from '../../utils/formatPrice';
 
 
-const cart = JSON.parse(sessionStorage.getItem('cart')) ?? [];
+const cart = ref(JSON.parse(sessionStorage.getItem('cart')) ?? []);
 const listItems = ref([]);
+const totalPrice = ref(0);
+
+const updateTotalPrice = () => {
+    totalPrice.value  = cart.value.reduce((total, item) => {
+        const product = listItems.value.find(product => product.product_id == item.id && product.color_id == item.color && product.size_id == item.size);
+        if(product){
+            return total + (product.price * item.quantity)
+        }
+        return total
+    },0)
+}
 const getItemCart = async () => {
     try {
-        const {data} = await ClientApi.post('/cart', {
-            cart: cart
+        const { data } = await ClientApi.post('/cart', {
+            cart: cart.value
         });
-        
-        if(data.success){
-            listItems.value = data.items
-            console.log(listItems.value);
-            
-        }else{
+
+        if (data.success) {
+            listItems.value = data.items;
+            updateTotalPrice()
+        } else {
             alert(data.message);
         }
-        
+
     } catch (error) {
         alert(error.response.data.message)
     }
-    
+
 }
 
-onMounted(()=> {
+onMounted(() => {
     getItemCart();
 })
 
+const deleteItem = (prdId, colorId, sizeId) => {
+
+    cart.value = cart.value.filter(item => !(item.id == prdId && item.color == colorId && item.size == sizeId));
+    
+    sessionStorage.setItem('cart', JSON.stringify(cart.value));
+    updateTotalPrice()
+    alert('Xoá sản phẩm khỏi giỏ hàng thành công')
+}
+
+const updateQuantity = (prdId, colorId, sizeId) => {
+    const item =  document.getElementById('item_' + prdId + "_" + colorId + '_' + sizeId);
+
+    if(item.value <= 0){
+        item.value = 1;
+    }
+    if(item){
+        sessionStorage.setItem('cart', JSON.stringify(cart.value));
+        updateTotalPrice()
+    }
+
+    
+}
 </script>
 
 <style lang="scss" scoped>

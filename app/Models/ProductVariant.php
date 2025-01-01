@@ -9,6 +9,9 @@ class ProductVariant extends Model
 {
     use HasFactory;
 
+    public function product() {
+        return $this->belongsTo(Product::class);
+    }
     public function size(){
         return $this->belongsTo(Size::class);
     }
