@@ -16,6 +16,7 @@ import Register from './js/Pages/Auth/Register.vue';
 import Account from './js/Pages/Client/Account.vue';
 import Login from './js/Pages/Auth/Login.vue';
 import Cart from './js/Pages/Client/Cart.vue';
+import Order from './js/Pages/Client/Order.vue';
 const routes = [
     {
         path: '/',
@@ -27,7 +28,8 @@ const routes = [
             { path: '/register', name: 'register', component: Register},
             { path: '/account', name: 'account', component: Account},
             { path: '/login', name: 'login', component: Login},
-            { path: '/cart', name: 'cart', component: Cart}
+            { path: '/cart', name: 'cart', component: Cart},
+            { path: '/order', name: 'order', component: Order},
         ],
     },
 

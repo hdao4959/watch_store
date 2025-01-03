@@ -2,7 +2,7 @@
     <div class="cart-container">
         <h2 class="text-center">Giỏ hàng</h2>
 
-        <div class="cart-list">
+        <div v-if="cart.length > 0" class="cart-list">
 
             <template v-for="c in cart">
                 <template v-for="item in listItems">
@@ -29,12 +29,18 @@
 
  
 
-        </div>
-
         <div class="cart-footer">
             <h4 class="total-price">{{ formatPrice(totalPrice) }}</h4>
-            <button class="checkout-btn">Thanh toán</button>
+            <button @click="orderCart" class="checkout-btn">Đặt hàng</button>
         </div>
+
+        </div>
+
+        <div v-else class="text-center">
+            <h4>Không có sản phẩm trong giỏ hàng</h4>
+            <router-link to="/">Trang chủ</router-link>
+        </div>
+
     </div>
 </template>
 
@@ -42,8 +48,9 @@
 import { onMounted, ref } from 'vue';
 import { ClientApi, url_image } from '../../config';
 import { formatPrice } from '../../utils/formatPrice';
+import { useRouter } from 'vue-router';
 
-
+const router = useRouter();
 const cart = ref(JSON.parse(sessionStorage.getItem('cart')) ?? []);
 const listItems = ref([]);
 const totalPrice = ref(0);
@@ -77,7 +84,9 @@ const getItemCart = async () => {
 }
 
 onMounted(() => {
-    getItemCart();
+    if(cart.value.length > 0){
+        getItemCart();
+    }
 })
 
 const deleteItem = (prdId, colorId, sizeId) => {
@@ -99,7 +108,25 @@ const updateQuantity = (prdId, colorId, sizeId) => {
         sessionStorage.setItem('cart', JSON.stringify(cart.value));
         updateTotalPrice()
     }
+}
 
+const orderCart = async () => {
+    try {
+        const {data} = await ClientApi.post('/order', {
+            cart: cart.value
+        });
+
+        router.push({
+            path: '/order',
+            query: {
+                items: JSON.stringify(data.items),
+                total_price: data.total_price
+            }
+        });
+        
+    } catch (error) {
+        alert(error.response.data.message)
+    }
     
 }
 </script>
