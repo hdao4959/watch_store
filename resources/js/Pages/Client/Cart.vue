@@ -31,7 +31,7 @@
 
         <div class="cart-footer">
             <h4 class="total-price">{{ formatPrice(totalPrice) }}</h4>
-            <button @click="orderCart" class="checkout-btn">Đặt hàng</button>
+            <router-link to="checkout" class="checkout-btn">Đặt hàng</router-link>
         </div>
 
         </div>
@@ -50,7 +50,6 @@ import { ClientApi, url_image } from '../../config';
 import { formatPrice } from '../../utils/formatPrice';
 import { useRouter } from 'vue-router';
 
-const router = useRouter();
 const cart = ref(JSON.parse(sessionStorage.getItem('cart')) ?? []);
 const listItems = ref([]);
 const totalPrice = ref(0);
@@ -110,25 +109,7 @@ const updateQuantity = (prdId, colorId, sizeId) => {
     }
 }
 
-const orderCart = async () => {
-    try {
-        const {data} = await ClientApi.post('/order', {
-            cart: cart.value
-        });
 
-        router.push({
-            path: '/order',
-            query: {
-                items: JSON.stringify(data.items),
-                total_price: data.total_price
-            }
-        });
-        
-    } catch (error) {
-        alert(error.response.data.message)
-    }
-    
-}
 </script>
 
 <style lang="scss" scoped>

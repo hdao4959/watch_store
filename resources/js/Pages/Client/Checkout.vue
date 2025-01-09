@@ -8,15 +8,22 @@
             <form>
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Họ và tên</label>
-                    <input type="text" id="fullName" class="form-control" placeholder="Nhập họ và tên">
+                    <input type="text" id="fullName" class="form-control" v-model="full_name" placeholder="Nhập họ và tên">
                 </div>
                 <div class="mb-3">
                     <label for="phoneNumber" class="form-label">Số điện thoại</label>
-                    <input type="text" id="phoneNumber" class="form-control" placeholder="Nhập số điện thoại">
+                    <input type="text" id="phoneNumber" class="form-control" v-model="phone_number" placeholder="Nhập số điện thoại">
                 </div>
                 <div class="mb-3">
                     <label for="address" class="form-label">Địa chỉ</label>
-                    <input type="text" id="address" class="form-control" placeholder="Nhập địa chỉ">
+                    <input type="text" id="address" class="form-control" v-model="address" placeholder="Nhập địa chỉ">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Hình thức thanh toán</label>
+                    <select class="form-control" v-model="type_pay" name="" id="">
+                        <option value="0" >Thanh toán khi nhận hàng</option>
+                        <option value="1">Thanh toán online</option>
+                        </select>
                 </div>
             </form>
         </div>
@@ -59,25 +66,48 @@
                     <p class="text-muted">Giỏ hàng trống.</p>
                 </div>
             </div>
+            <button @click="handleOrder" class="btn btn-danger mt-3">Thanh toán</button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { url_image } from '../../config';
+import { ClientApi, url_image } from '../../config';
 import { formatPrice } from '../../utils/formatPrice';
 
 const { query } = useRoute();
-
+const full_name = ref('');
+const phone_number = ref('');
+const address = ref('');
+const type_pay = ref(0);
 const items = ref([]);
 const total_price = ref(0);
 
+const cart = sessionStorage.getItem('cart') ?? [];
+
+const getDescriptionCart = async () => {
+    const {data} = await ClientApi.post('/checkout', {
+        cart: JSON.parse(cart)
+    });
+    items.value =  data.items ?? '[]';
+    total_price.value = data.total_price || 0;
+}
+
 onMounted(() => {
-    items.value = JSON.parse(query.items || '[]');
-    total_price.value = query.total_price || 0;
+    getDescriptionCart();
+    
 });
+
+const handleOrder = async () => {
+    const { data } = await ClientApi.post('/order', {
+        full_name: '',
+        full_name: '',
+        full_name: '',
+    })
+    
+}
 </script>
 
 <style lang="scss" scoped>
