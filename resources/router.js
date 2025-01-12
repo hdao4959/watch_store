@@ -17,6 +17,7 @@ import Account from './js/Pages/Client/Account.vue';
 import Login from './js/Pages/Auth/Login.vue';
 import Cart from './js/Pages/Client/Cart.vue';
 import Checkout from './js/Pages/Client/Checkout.vue';
+import OrderList from './js/Pages/Admin/Order/OrderList.vue';
 const routes = [
     {
         path: '/',
@@ -47,6 +48,7 @@ const routes = [
             { path: 'sizes', name: 'sizes', component: SizeList },
             { path: 'add-size', name: 'add-size', component: SizeAdd },
             { path: 'colors', name: 'colors', component: ColorList },
+            { path: 'orders', name: 'orders', component: OrderList },
         ],
     }
 ];

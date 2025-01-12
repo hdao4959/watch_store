@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('full_name',50);
             $table->string('phone_number',20);
             $table->string('address',100);
+            $table->enum('type_pay', [0, 1])->default(0);// 0: thanh toán khi nhận hàng - 1: thanh toán online
             $table->unsignedBigInteger('id_user')->nullable();
+            $table->enum('status', ['pending', 'expired', 'completed', 'failed', 'canceled'])->default('pending');
             $table->timestamps();
         });
     }

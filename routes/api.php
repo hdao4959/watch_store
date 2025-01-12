@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ControllerForForm;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Auth\AuthController;
@@ -48,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('/products', ProductController::class);
         Route::apiResource('/sizes', SizeController::class);
         Route::apiResource('/colors', ColorController::class);
+        Route::get('/orders', [OrderController::class, 'index']);
     });
 });
 

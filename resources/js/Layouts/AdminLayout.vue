@@ -21,6 +21,9 @@
         <li class="nav-item">
           <router-link class="nav-link text-white" to="/admin/colors">Màu sắc</router-link>
         </li>
+        <li class="nav-item">
+          <router-link class="nav-link text-white" to="/admin/orders">Đơn hàng</router-link>
+        </li>
       </ul>
     </nav>
 
