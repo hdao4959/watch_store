@@ -22,7 +22,6 @@
                     <td>
                     <button class="btn btn-sm btn-secondary">Chi tiết</button></td>
                 </tr>
-
                 <tr v-else>
                     <td colspan="3">Không có đơn hàng nào</td>
                 </tr>

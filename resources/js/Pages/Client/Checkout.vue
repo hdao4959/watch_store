@@ -112,29 +112,9 @@ const getInfoAccount = async () => {
 const txt = ref('');
 
 
-function getVnpCreateDate() {
-    const now = new Date();
-
-    // Tạo thời gian theo UTC+7 (Asia/Ho_Chi_Minh)
-    const offset = 7 * 60 * 60 * 1000; // UTC+7
-    const localTime = new Date(now.getTime() + offset);
-
-    const year = localTime.getFullYear();
-    const month = String(localTime.getMonth() + 1).padStart(2, '0');
-    const day = String(localTime.getDate()).padStart(2, '0') ;
-    const hours = String(localTime.getHours()).padStart(2, '0');
-    const minutes = String(localTime.getMinutes()).padStart(2, '0');
-    const seconds = String(localTime.getSeconds()).padStart(2, '0');
-
-    return `${year}${month}${day}${hours}${minutes}${seconds}`;
-    // return day
-}
 
 
 
-// Sử dụng
-const vnp_CreateDate = getVnpCreateDate();
-// alert(vnp_CreateDate);
 
 
 onMounted(() => {
