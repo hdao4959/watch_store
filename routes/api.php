@@ -60,6 +60,8 @@ Route::get('/products/{slug}', [ClientProductController::class, 'show']);
 Route::post('/cart', [CartController::class, 'getItemsCart']);
 Route::post('/checkout', [CartController::class, 'checkout']);
 Route::post('/order', [CartController::class, 'order']);
+// Route::get('/IPN', [CartController::class, 'handleIPN']);
+
 Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');

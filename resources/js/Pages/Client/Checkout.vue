@@ -138,11 +138,13 @@ const handleOrder = async () => {
         id_user: id_user.value,
         cart: JSON.parse(cart)
     })
-    console.log(data);
-    // if (type_pay.value == 0) {
-    // }
-    // else {
-    // }
+
+    if(data.vnp_url){
+        window.location.href = data.vnp_url
+    }
+    else{
+        alert('Thanh toán thất bại!');
+    }
 
 
 
