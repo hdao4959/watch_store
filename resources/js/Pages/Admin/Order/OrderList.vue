@@ -20,7 +20,7 @@
                     <td>{{ order.address }}</td>
                     <td>{{ order.status }}</td>
                     <td>
-                    <button class="btn btn-sm btn-secondary">Chi tiết</button></td>
+                    <router-link :to="{name: 'order-detail', params:{ id: order.id}}" class="btn btn-sm btn-secondary">Chi tiết</router-link></td>
                 </tr>
                 <tr v-else>
                     <td colspan="3">Không có đơn hàng nào</td>

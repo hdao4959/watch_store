@@ -138,9 +138,8 @@ const handleOrder = async () => {
         id_user: id_user.value,
         cart: JSON.parse(cart)
     })
-
-    if(data.vnp_url){
-        window.location.href = data.vnp_url
+    if(data.url_redirect){
+        window.location.href = data.url_redirect
     }
     else{
         alert('Thanh toán thất bại!');

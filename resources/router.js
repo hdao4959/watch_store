@@ -18,6 +18,9 @@ import Login from './js/Pages/Auth/Login.vue';
 import Cart from './js/Pages/Client/Cart.vue';
 import Checkout from './js/Pages/Client/Checkout.vue';
 import OrderList from './js/Pages/Admin/Order/OrderList.vue';
+import ShowBill from './js/Pages/Client/ShowBill.vue';
+import OrderDetail from './js/Pages/Admin/Order/OrderDetail.vue';
+import OrderDt from './js/Pages/Client/OrderDt.vue';
 const routes = [
     {
         path: '/',
@@ -31,6 +34,9 @@ const routes = [
             { path: '/login', name: 'login', component: Login},
             { path: '/cart', name: 'cart', component: Cart},
             { path: '/checkout', name: 'checkout', component: Checkout},
+            { path: '/bill', name: 'bill', component: ShowBill},
+            { path: 'order-dt/:id', name: 'client-order-detail', component: OrderDt },
+
         ],
     },
 
@@ -49,6 +55,7 @@ const routes = [
             { path: 'add-size', name: 'add-size', component: SizeAdd },
             { path: 'colors', name: 'colors', component: ColorList },
             { path: 'orders', name: 'orders', component: OrderList },
+            { path: 'order-detail/:id', name: 'order-detail', component: OrderDetail },
         ],
     }
 ];

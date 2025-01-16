@@ -18,12 +18,12 @@
                         </ul>
                     </li>
                 </ul>
-                <ul  class="col nav_right">
+              <ul  class="col nav_right">
                 <div class="text-end mt-2 ">
                     
                     <router-link to="/cart"  ><i class="icons fa-solid fa-cart-shopping mx-2"></i></router-link>
                     
-                    <template v-if="account_name">
+                      <template v-if="account_name">
                         <router-link to="/account">{{ account_name }}</router-link>
                         <!-- <button @click="logout" class="btn btn-danger">Đăng xuất</button> -->
                     </template>
@@ -43,7 +43,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { ClientApi } from '../../config';
-
 
 const account_name = ref(localStorage.getItem('account_name') || '');
 

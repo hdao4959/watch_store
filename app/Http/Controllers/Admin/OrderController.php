@@ -56,7 +56,16 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $order = Order::with('order_items')->find($id);
+
+            return response()->json([
+                'success' => true,
+                'order' => $order
+            ]);
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
     }
 
     /**

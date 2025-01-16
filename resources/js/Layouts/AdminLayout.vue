@@ -33,6 +33,7 @@
         <h4 class="mb-0">Dashboard</h4>
         <div class="user-info">
           <span>Xin chào, <strong><em>{{ account_name }}</em></strong></span>
+          <button @click="handleLogout" class="btn logout text-center">Đăng xuất</button>
         </div>
       </header>
       <div class="content p-4">
@@ -43,9 +44,19 @@
 </template>
 
 <script setup>
+import { logout } from '../Pages/Auth/Logout';
+
 const name = 'AdminLayout';
 
 const account_name = localStorage.getItem('account_name') || 'Admin';
+
+
+const handleLogout = () => {
+    const hasToken = localStorage.getItem('token') ? true : false;    
+    if(hasToken){
+        logout();
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -75,6 +86,7 @@ const account_name = localStorage.getItem('account_name') || 'Admin';
       background-color: rgba(255, 255, 255, 0.1);
     }
   }
+  
 }
 
 .main-content {
@@ -93,5 +105,28 @@ const account_name = localStorage.getItem('account_name') || 'Admin';
     overflow-y: auto;
     background-color: #f8f9fa;
   }
+}
+
+.user-info {
+  cursor: pointer;
+  position: relative;
+  
+
+}
+
+.user-info:hover .logout{
+      display: block;
+  }
+
+.logout{
+  font-weight: bold;
+  width: 100%;
+  background-color: #ffffff;
+  color:rgb(207, 21, 21);
+  display: none;
+  position: absolute;
+  top: 10;
+  left:100;
+  border:1px solid black;
 }
 </style>

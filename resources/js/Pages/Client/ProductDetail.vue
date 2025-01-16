@@ -131,6 +131,8 @@ const handleActiveColor = (color_id) => {
 
     }
     else {
+    handleActiveSize(null)
+
         activeColor.value = color_id;
         // Lấy các size tương ứng với màu được chọn
         sizes.value = product.value.variants.filter(variant => variant.color_id === color_id);
@@ -139,6 +141,7 @@ const handleActiveColor = (color_id) => {
 };
 
 const handleActiveSize = (size_id) => {
+    
     if (size_id == activeSize.value) {
         activeSize.value = null
     } else {
