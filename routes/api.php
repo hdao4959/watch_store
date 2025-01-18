@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout',  'logout');
     });
     Route::get('/order_history', [ClientOrderController::class, 'orderHistory']);
-
+    Route::get('/orders/{id}', [ClientOrderController::class, 'show']);
 
     Route::middleware('role:0')->prefix('/admin')->group(function () {
         Route::apiResource('/categories', CategoryController::class);
@@ -58,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/categories', [ClientCategoryController::class, 'index']);
+Route::get('/categories/{slug}', [ClientProductController::class, 'productsOfCategory']);
 Route::get('/products/{slug}', [ClientProductController::class, 'show']);
 Route::post('/cart', [CartController::class, 'getItemsCart']);
 Route::post('/checkout', [CartController::class, 'checkout']);

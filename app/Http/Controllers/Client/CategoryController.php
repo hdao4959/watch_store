@@ -26,4 +26,6 @@ class CategoryController extends Controller{
             return $this->handleErrorNotDefine($th);
         }
     }
+
+    
 }

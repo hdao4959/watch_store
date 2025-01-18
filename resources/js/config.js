@@ -16,16 +16,7 @@ const AdminApi = axios.create({
         Authorization: `Bearer ${token}`
     }
 })
-    
-// AdminApi.interceptors.response.use(config => {
-//     const token = localStorage.getItem('token') || '';
-//     if(token){
-//         config.headers.Authorization = `Bearer ${token}`
-//     }
-//     return config
-// }, error => {
-//     return Promise.reject(error)
-// })
+
 
 
 export const ClientApi = axios.create({

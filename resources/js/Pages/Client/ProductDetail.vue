@@ -67,6 +67,7 @@ import { useRoute } from 'vue-router';
 import { ClientApi, url_image } from '../../config';
 import { computed, onMounted, ref } from 'vue';
 import { formatPrice } from '../../utils/formatPrice';
+import { countQuantityCart } from '../../utils/countQuantityCart';
 
 
 const { params } = useRoute();
@@ -180,9 +181,8 @@ const handleAddCart = () => {
         } else {
             cart.push(newProduct)
         }
-
         sessionStorage.setItem('cart', JSON.stringify(cart));
-        alert('Thêm sản phẩm vào giỏ hàng thành công!')
+        countQuantityCart();
     }
 
 }

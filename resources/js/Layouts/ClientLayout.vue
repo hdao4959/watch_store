@@ -55,6 +55,8 @@ const imgSnowIcon = url_image + "img_thumbnail/icon/beautiful-blue-snowflake-on-
     margin: 0;
     padding: 0;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    overflow-x: hidden; // Ngăn nội dung tràn ngang
+
 }
 
 #client {

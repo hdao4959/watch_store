@@ -1,9 +1,11 @@
 <template>
-    <div class="my-2">
-        <h2>Thông tin tài khoản</h2>
+
+    <!-- <button  @click="handleGoBack()">Quay lại</button> -->
+    <div class="mx-5 my-2">
+        <h2 class="text-center">Thông tin tài khoản</h2>
 
         <h3>{{ info_account.email }}</h3>
-        <h3> Đơn hàng của tôi </h3>
+        <h3 class="text-center"> Đơn hàng của tôi </h3>
 
         <table class="table table-striped mt-2">
             <thead>
@@ -42,10 +44,12 @@ import { onMounted, ref } from 'vue';
 import { ClientApi } from '../../config';
 import { useRouter } from 'vue-router';
 import { logout } from '../Auth/Logout';
+import { goBack } from '../../utils/navigate';
 const router = useRouter();
 const info_account = ref({});
 const token = localStorage.getItem('token') || '';
 const orders = ref([]);
+
 
 
 const getData = async () => {
@@ -95,7 +99,9 @@ onMounted(() => {
     }
 })
 
-
+const handleGoBack = () => {
+    goBack(router);
+}
 </script>
 
 <style lang="scss" scoped>

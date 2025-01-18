@@ -1,8 +1,8 @@
 <template>
     <div class="footer">
         <h1 class="text-center">Hair Watch</h1>
-       <div  class="row row-cols-3 text-center">
-        <div class="col "> 
+       <div  class="row text-center">
+        <div class="col"> 
         <a href="">Trang chủ</a> <br>
         <template v-if="categories.length > 0" v-for="cate in categories">
             <router-link :to="`/categories/${cate.slug}`">{{ cate.name }}</router-link><br>

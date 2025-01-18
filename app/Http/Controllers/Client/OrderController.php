@@ -30,4 +30,22 @@ class OrderController extends Controller
             return $this->handleErrorNotDefine($th);
         }
     }
+
+    public function show(string $id){
+        try {
+            $user_id = request()->user()->id;
+            $order = Order::with('order_items')->where([
+                'id' =>  (int) $id,
+                'id_user' => $user_id
+            ])->first();
+
+            return response()->json([
+                'success' => true,
+                'order' => $order
+            ]);
+
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
+    }
 }

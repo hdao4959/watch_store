@@ -48,7 +48,7 @@
 import { onMounted, ref } from 'vue';
 import { ClientApi, url_image } from '../../config';
 import { formatPrice } from '../../utils/formatPrice';
-import { useRouter } from 'vue-router';
+import { countQuantityCart } from '../../utils/countQuantityCart';
 
 const cart = ref(JSON.parse(sessionStorage.getItem('cart')) ?? []);
 const listItems = ref([]);
@@ -92,9 +92,16 @@ const deleteItem = (prdId, colorId, sizeId) => {
 
     cart.value = cart.value.filter(item => !(item.id == prdId && item.color == colorId && item.size == sizeId));
     
-    sessionStorage.setItem('cart', JSON.stringify(cart.value));
-    updateTotalPrice()
-    alert('Xoá sản phẩm khỏi giỏ hàng thành công')
+    const isConfirm = confirm("Bạn có chắc muốn xoá sản phẩm này khỏi giỏ hàng không?");
+    if(isConfirm == true){
+        sessionStorage.setItem('cart', JSON.stringify(cart.value));
+        countQuantityCart();
+        updateTotalPrice();
+        // return
+    }
+    // else{
+    //     return 
+    // }
 }
 
 const updateQuantity = (prdId, colorId, sizeId) => {
@@ -107,6 +114,7 @@ const updateQuantity = (prdId, colorId, sizeId) => {
         sessionStorage.setItem('cart', JSON.stringify(cart.value));
         updateTotalPrice()
     }
+    countQuantityCart();
 }
 
 
