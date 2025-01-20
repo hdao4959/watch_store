@@ -1,14 +1,16 @@
 <template>
-    <div class="prd_card col my-2">
-        <div class="icon_love"><i class="fa-regular fa-heart"></i></div>
-        <div class="my-4">
-            <img class="img-fluid" :src="`${url_image}${prd.img_thumbnail}`" :alt="`${url_image}${prd.img_thumbnail}`">
-        </div>
-        <div class="bottom_card">
-            <span>Msp: {{ prd.id }}</span><br>
-            <span>{{ prd.name }}</span>
-        </div>
-    </div>
+
+    <router-link class="nav-link prd_card col my-2" :to="{ name: 'product-detail', params:{ slug: prd_slug } }">
+            <div class="icon_love"><i class="fa-regular fa-heart"></i></div>
+            <div class="my-4">
+                <img class="img-fluid" :src="`${url_image}${prd.img_thumbnail}`"
+                    :alt="`${url_image}${prd.img_thumbnail}`">
+            </div>
+            <div class="bottom_card">
+                <span>Msp: {{ prd.id }}</span><br>
+                <span>{{ prd.name }}</span>
+            </div>
+    </router-link>
 </template>
 
 <script>
@@ -17,13 +19,17 @@ export default {
     props: {
         prd: {
             type: Object,
-        required: true
+            required: true
         },
         url_image: {
             type: String,
             required: true
+        },
+        prd_slug: {
+            type: String,
+            required: true
         }
-        
+
     }
 }
 </script>
@@ -31,12 +37,14 @@ export default {
 
 <style lang="scss" scoped>
 .prd_card {
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     flex: 1 0 calc(25% - 20px);
-    margin: 5px;
+    // margin: 5px;
     padding-top: 10px;
     position: relative;
     min-height: 400px;
     background-color: rgb(227, 227, 227);
+
     // border: 1px solid rgb(97, 95, 95);
     &:hover {
         .bottom_card {
@@ -57,7 +65,7 @@ export default {
 }
 
 img {
-    
+
     transition: transform 0.5s ease;
 }
 
@@ -81,9 +89,9 @@ img {
     top: 0;
     right: 0;
 
-    // display: none;
     &:hover {
         background-color: pink;
         color: white;
     }
-}</style>
+}
+</style>
