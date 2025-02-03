@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController as ClientOrderController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,7 +65,7 @@ Route::post('/cart', [CartController::class, 'getItemsCart']);
 Route::post('/checkout', [CartController::class, 'checkout']);
 Route::post('/order', [CartController::class, 'order']);
 Route::get('/ipn', [CartController::class, 'handleIPN']);
-
+Route::get('/search', [SearchController::class, 'search']);
 Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');

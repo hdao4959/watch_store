@@ -21,6 +21,7 @@ import OrderList from './js/Pages/Admin/Order/OrderList.vue';
 import ShowBill from './js/Pages/Client/ShowBill.vue';
 import OrderDetail from './js/Pages/Admin/Order/OrderDetail.vue';
 import OrderDt from './js/Pages/Client/OrderDt.vue';
+import Search from './js/Pages/Client/Search.vue';
 const routes = [
     {
         path: '/',
@@ -36,7 +37,7 @@ const routes = [
             { path: '/checkout', name: 'checkout', component: Checkout},
             { path: '/bill', name: 'bill', component: ShowBill},
             { path: 'order-dt/:id', name: 'client-order-detail', component: OrderDt },
-
+            { path: '/search', name: 'search', component: Search}
         ],
     },
 

@@ -1,5 +1,6 @@
 <template>
   <div class="mx-5">
+  <h5><router-link class="text-dark" to="/">Trang chủ</router-link> | Sản phẩm | {{ product.name }}</h5>
     <div class="row">
       <!-- Hình ảnh sản phẩm -->
       <div class="col-md-6">

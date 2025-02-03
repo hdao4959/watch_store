@@ -234,6 +234,7 @@ const updateQuantity = (prdId, colorId, sizeId) => {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .checkout-btn:hover {

@@ -30,8 +30,8 @@
     <!-- Main Content -->
     <main class="main-content">
       <header class="header bg-light d-flex justify-content-between align-items-center p-3 shadow-sm">
-        <h4 class="mb-0">Dashboard</h4>
-        <div class="user-info">
+        <h4 class="mb-0"></h4>
+        <div class="user-info text-end">
           <span>Xin chào, <strong><em>{{ account_name }}</em></strong></span>
           <button @click="handleLogout" class="btn logout text-center">Đăng xuất</button>
         </div>

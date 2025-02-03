@@ -1,20 +1,22 @@
 <template>
 
-    <router-link class="nav-link prd_card col my-2" :to="{ name: 'product-detail', params:{ slug: prd_slug } }">
+    <router-link class="nav-link prd_card col my-2" :to="{ name: 'product-detail', params:{ slug: prd.slug } }">
             <div class="icon_love"><i class="fa-regular fa-heart"></i></div>
             <div class="my-4">
                 <img class="img-fluid" :src="`${url_image}${prd.img_thumbnail}`"
                     :alt="`${url_image}${prd.img_thumbnail}`">
             </div>
             <div class="bottom_card">
-                <span>Msp: {{ prd.id }}</span><br>
+                <!-- <span>Msp: {{ prd.id }}</span><br> -->
                 <span>{{ prd.name }}</span>
             </div>
     </router-link>
 </template>
 
 <script>
+import { url_image } from '../../config';
 
+// const urlImage = url_image
 export default {
     props: {
         prd: {
@@ -25,10 +27,7 @@ export default {
             type: String,
             required: true
         },
-        prd_slug: {
-            type: String,
-            required: true
-        }
+
 
     }
 }

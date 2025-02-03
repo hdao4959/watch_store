@@ -2,7 +2,7 @@
   <div>
     <h2>Danh sách danh mục</h2>
     <router-link class="btn btn-success" to="add-category">Thêm mới</router-link>
-    <table class="table table-striped">
+    <table class="table table-hover">
       <thead>
         <tr>
           <th>Id</th>
