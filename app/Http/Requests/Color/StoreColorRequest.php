@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Product;
+namespace App\Http\Requests\Color;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProductRequest extends FormRequest
+class StoreColorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,7 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:products,name',
-            'slug' => 'required|unique:products,slug',
-            'category_id' => 'required|exists:categories,id',
-            'img_thumbnail' => 'required',
-            'description' => 'nullable',
-            'variants' => 'nullable'
+            'name' => 'required|unique:colors,name'
         ];
     }
-    protected $stopOnFirstFailure = true;
 }

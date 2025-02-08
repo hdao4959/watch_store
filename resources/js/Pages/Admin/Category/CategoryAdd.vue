@@ -60,7 +60,7 @@ const addCategory = async () => {
       successMessage.value = response.data.message
       categoryName.value = "",
         parentId.value = ""
-      router.push('/categories')
+      router.push('categories')
     }
     if (response.data.success == false) {
       errorMessage.value = response.data.message;

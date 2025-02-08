@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Color\StoreColorRequest;
 use App\Models\Color;
 use Illuminate\Http\Request;
 
@@ -11,13 +12,15 @@ class ColorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function handleErrorNotDefine($th){
+    public function handleErrorNotDefine($th)
+    {
         return response()->json(
             [
                 'success' => false,
                 'message' => 'Có lỗi xảy ra! ' . $th
-            ],500
-            );
+            ],
+            500
+        );
     }
     public function index()
     {
@@ -26,7 +29,7 @@ class ColorController extends Controller
             return response()->json([
                 'success' => true,
                 'colors' => $colors
-            ],200);
+            ], 200);
         } catch (\Throwable $th) {
             return $this->handleErrorNotDefine($th);
         }
@@ -43,9 +46,19 @@ class ColorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreColorRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+            Color::create($data);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Thêm màu sắc thành công!'
+            ], 200);
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
     }
 
     /**
@@ -77,6 +90,23 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
-        //
+        try {
+            $colorFind = Color::where('id', $color->id)->first();
+
+            if (!$colorFind) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Màu này không tồn tại!'
+                ], 404);
+            }
+            $colorFind->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Xoá màu sắc thành công!'
+            ], 200);
+        } catch (\Throwable $th) {
+            return $this->handleErrorNotDefine($th);
+        }
     }
 }

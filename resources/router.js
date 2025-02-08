@@ -22,22 +22,24 @@ import ShowBill from './js/Pages/Client/ShowBill.vue';
 import OrderDetail from './js/Pages/Admin/Order/OrderDetail.vue';
 import OrderDt from './js/Pages/Client/OrderDt.vue';
 import Search from './js/Pages/Client/Search.vue';
+import ColorAdd from './js/Pages/Admin/Color/ColorAdd.vue';
+import ProductEdit from './js/Pages/Admin/Product/ProductEdit.vue';
 const routes = [
     {
         path: '/',
         component: ClientLayout,
         children: [
             { path: '', name: 'home', component: Home },
-            { path: '/categories/:slug', name: 'product-of-category', component: Category},
-            { path: '/products/:slug',name: 'product-detail', component: ProductDetailClient}, 
-            { path: '/register', name: 'register', component: Register},
-            { path: '/account', name: 'account', component: Account},
-            { path: '/login', name: 'login', component: Login},
-            { path: '/cart', name: 'cart', component: Cart},
-            { path: '/checkout', name: 'checkout', component: Checkout},
-            { path: '/bill', name: 'bill', component: ShowBill},
+            { path: '/categories/:slug', name: 'product-of-category', component: Category },
+            { path: '/products/:slug', name: 'product-detail', component: ProductDetailClient },
+            { path: '/register', name: 'register', component: Register },
+            { path: '/account', name: 'account', component: Account },
+            { path: '/login', name: 'login', component: Login },
+            { path: '/cart', name: 'cart', component: Cart },
+            { path: '/checkout', name: 'checkout', component: Checkout },
+            { path: '/bill', name: 'bill', component: ShowBill },
             { path: 'order-dt/:id', name: 'client-order-detail', component: OrderDt },
-            { path: '/search', name: 'search', component: Search}
+            { path: '/search', name: 'search', component: Search }
         ],
     },
 
@@ -52,9 +54,11 @@ const routes = [
             { path: 'products', name: 'products', component: ProductList },
             { path: 'detail-product/:id', name: 'detail-product', component: ProductDetail },
             { path: 'add-product', name: 'add-product', component: ProductAdd },
+            { path: 'edit-product/:id', name: 'edit-product', component: ProductEdit },
             { path: 'sizes', name: 'sizes', component: SizeList },
             { path: 'add-size', name: 'add-size', component: SizeAdd },
             { path: 'colors', name: 'colors', component: ColorList },
+            { path: 'add-color', name: 'add-color', component: ColorAdd },
             { path: 'orders', name: 'orders', component: OrderList },
             { path: 'order-detail/:id', name: 'order-detail', component: OrderDetail },
         ],

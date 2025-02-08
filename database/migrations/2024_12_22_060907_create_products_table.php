@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name')->unique()->comment('Tên sản phẩm');
             $table->string('img_thumbnail')->comment('Hình ảnh sản phẩm');
             $table->string('slug')->unique();
+            $table->text('description')->nullable()->comment('Mô tả sản phẩm');
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

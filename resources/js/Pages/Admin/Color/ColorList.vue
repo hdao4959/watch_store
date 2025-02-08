@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>Danh sách size</h2>
-        <router-link to="add-size" class="btn btn-success">Thêm mới</router-link>
+        <router-link to="add-color" class="btn btn-success">Thêm mới</router-link>
         <table class="table table-striped mt-2">
             <thead>
                 <tr>
@@ -43,7 +43,10 @@ const getData = async () => {
 }
 
 const onDelete = async (id) => {
+    console.log(id);
+    
     try {
+
         const isConfirm = confirm('Bạn có chắc muốn xoá màu này không?');
         if(isConfirm){
             const {data} = await AdminApi.delete('/colors/' + id);

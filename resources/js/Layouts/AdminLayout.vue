@@ -3,7 +3,7 @@
     <!-- Sidebar -->
     <nav class="sidebar bg-dark text-white">
       <div class="sidebar-header text-center py-3">
-        <h3>Admin Panel</h3>
+        <h3>Admin</h3>
       </div>
       <ul class="nav flex-column">
         <li class="nav-item">
@@ -30,7 +30,7 @@
     <!-- Main Content -->
     <main class="main-content">
       <header class="header bg-light d-flex justify-content-between align-items-center p-3 shadow-sm">
-        <h4 class="mb-0"></h4>
+        <div></div>
         <div class="user-info text-end">
           <span>Xin chào, <strong><em>{{ account_name }}</em></strong></span>
           <button @click="handleLogout" class="btn logout text-center">Đăng xuất</button>

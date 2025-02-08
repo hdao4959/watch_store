@@ -1,14 +1,14 @@
 <template>
     <div>
-        <h2>Thêm mới size</h2>
+        <h2>Thêm mới màu sắc</h2>
         <form action="" @submit.prevent="onSubmit">
             <div>
-                <label for="">Số size</label>
-                <input type="number" class="form-control" v-model="sizeName">
+                <label for="">Màu sắc</label>
+                <input type="text" class="form-control" v-model="colorName">
             </div>
             <div class="mt-2">
                 <button type="submit" class="btn btn-success">Thêm</button>
-                <router-link to="sizes" class="btn btn-secondary">Quay lại</router-link>
+                <router-link to="colors" class="btn btn-secondary">Quay lại</router-link>
             </div>
         </form>
     </div>
@@ -20,13 +20,13 @@ import { useRouter } from 'vue-router';
 import AdminApi from '../../../config';
 
 const router = useRouter();
-const sizeName = ref('');
+const colorName = ref('');
 const onSubmit = async () => {
 
     try {
-        const { data } = await AdminApi.post('/sizes', { name: sizeName.value });
+        const { data } = await AdminApi.post('/colors', { name: colorName.value });
         alert(data.message);
-        router.push('/sizes');
+        router.push('colors');
     } catch (error) {
         alert(error.response.data.message);
     }

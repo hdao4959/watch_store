@@ -18,22 +18,37 @@ class ProductController extends Controller
      */
 
     const PATH_IMAGE = 'img_thumbnail';
-    public function handleErrorNotDefine($th){
+    public function handleErrorNotDefine($th)
+    {
         return response()->json(
             [
                 'success' => false,
                 'message' => 'Có lỗi xảy ra! ' . $th
-            ],500
-            );
+            ],
+            500
+        );
     }
-    
-    public function index()
+
+    public function index(Request $request)
     {
         try {
-            $products = Product::paginate(10);
+            $query = Product::query();
+            $column = ['id', 'img_thumbnail', 'name'];
+            $order_column = $request->input("order_column", 0);
+            $order_dir = $request->input("order_dir", 'asc');
+            
+            $products = $query->where('name', "LIKE", "%$request->search%")->orderBy($column[$order_column],$order_dir )
+            ->offset($request->start)->limit($request->length)->get();
+
+            $totalRecords = $query->count();
+            $filteredRecords = $totalRecords;
+
             return response()->json([
-                'success' => true,
-                'products' => $products
+                "success" => true,
+                "draw" => $request->draw,
+                "recordsTotal" => $totalRecords,
+                "recordsFiltered" => $filteredRecords,
+                "data" => $products
             ]);
         } catch (\Throwable $th) {
             return $this->handleErrorNotDefine($th);
@@ -52,10 +67,10 @@ class ProductController extends Controller
             $data['img_thumbnail'] = $img_thumbnail;
             $product = Product::create($data);
 
-            if($data['variants']){
+            if ($data['variants']) {
                 $variants_parseJson  = json_decode($data['variants']);
                 $productVariants = [];
-                foreach($variants_parseJson as $variant){
+                foreach ($variants_parseJson as $variant) {
                     $productVariants[] = [
                         'product_id' => $product->id,
                         'size_id' => $variant->size_id,
@@ -71,7 +86,7 @@ class ProductController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Thêm mới sản phẩm thành công!'
-            ],201);
+            ], 201);
         } catch (\Throwable $th) {
             DB::rollback();
             return $this->handleErrorNotDefine($th);
@@ -87,19 +102,18 @@ class ProductController extends Controller
             $product = Product::with([
                 'category.parent',
                 'variants.size',
-                'variants.color' 
+                'variants.color'
             ])->where('id', $id)->first();
-            if(!$product){
+            if (!$product) {
                 return response()->json([
                     'success' => false,
                     'message' => "Sản phẩm này không tồn tại"
-                ],404);
+                ], 404);
             }
             return response()->json([
                 'success' => true,
                 'product' => $product
             ]);
-
         } catch (\Throwable $th) {
             return $this->handleErrorNotDefine($th);
         }
@@ -110,7 +124,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        
     }
 
     /**
@@ -132,14 +146,14 @@ class ProductController extends Controller
             $product->delete();
             ProductVariant::where('product_id', $product->id)->delete();
 
-            if($product->img_thumbnail && Storage::exists($product->img_thumbnail)){
+            if ($product->img_thumbnail && Storage::exists($product->img_thumbnail)) {
                 Storage::delete($product->img_thumbnail);
             }
             DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Xoá sản phẩm thành công!'
-            ],200);
+            ], 200);
         } catch (\Throwable $th) {
             DB::rollback();
             return $this->handleErrorNotDefine($th);

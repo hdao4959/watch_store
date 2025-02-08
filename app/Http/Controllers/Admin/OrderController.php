@@ -11,23 +11,37 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function handleErrorNotDefine($th){
+    public function handleErrorNotDefine($th)
+    {
         return response()->json(
             [
                 'success' => false,
                 'message' => 'Có lỗi xảy ra! ' . $th
-            ],500
-            );
+            ],
+            500
+        );
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $orders = Order::paginate(10);
+            $query = Order::query();
+            $totalOrder = $query->count();
+            $column = ['id', 'full_name', 'phone_number', 'address', 'status'];
+            $order_column = $request->input('order_column', 0);
+            $order_dir = $request->input('order_dir', 'asc');
+
+            $orders = $query->where('full_name', "LIKE", "%$request->search%")
+            ->offset($request->start)->limit($request->length)
+            ->orderBy($column[$order_column], $order_dir)->get();
+            
             return response()->json([
                 'success' => true,
-                'orders' => $orders
+                'draw' => (int) $request->draw,
+                'recordTotal' => $totalOrder,
+                'recordFiltered' => (int) $request->length,
+                'data' => $orders   
             ]);
         } catch (\Throwable $th) {
             return $this->handleErrorNotDefine($th);

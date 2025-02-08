@@ -1,7 +1,7 @@
 import axios from "axios"
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-
+export const baseUrl = 'http://127.0.0.1:8000/'
 export const url_image = 'http://127.0.0.1:8000/storage/'
 
 const router = useRouter();
